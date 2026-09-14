@@ -94,6 +94,15 @@ if [[ ${CONDA_BUILD_CROSS_COMPILATION:-0} == 1 ]]; then
       if [[ "${FORTRANFLAGS}" =~ $re ]]; then
         export FORTRANFLAGS="${BASH_REMATCH[1]}${BASH_REMATCH[2]}"
       fi
+      # Filter out -mabi=.* from F*FLAGS (RISC-V)
+      re='\-mabi\=[^[:space:]]*(.*)'
+      if [[ "${FFLAGS}" =~ $re ]]; then
+        export FFLAGS="${BASH_REMATCH[1]}${BASH_REMATCH[2]}"
+      fi
+      re='\-mabi\=[^[:space:]]*(.*)'
+      if [[ "${FORTRANFLAGS}" =~ $re ]]; then
+        export FORTRANFLAGS="${BASH_REMATCH[1]}${BASH_REMATCH[2]}"
+      fi
       export LDFLAGS=${LDFLAGS//$PREFIX/$BUILD_PREFIX}
       export CPPFLAGS=${CPPFLAGS//$PREFIX/$BUILD_PREFIX}
       export NM=$($CC_FOR_BUILD -print-prog-name=nm)
